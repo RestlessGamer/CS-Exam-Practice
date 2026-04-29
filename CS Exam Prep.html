@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Last Prep — IB Computer Science</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<nav>
+  <div class="nav-brand">Last<em>Prep</em></div>
+  <div class="nav-links">
+    <button class="nav-link active" onclick="go('home')">Home</button>
+    <button class="nav-link" onclick="go('practice')">Practice</button>
+    <button class="nav-link" onclick="go('concepts')">Concepts</button>
+    <button class="nav-link" onclick="go('dashboard')">Dashboard</button>
+    <button class="nav-link" onclick="go('exam')">Exam</button>
+  </div>
+  <div class="nav-streak">🔥 <span id="sc">0</span></div>
+</nav>
+
+<!-- HOME -->
+<div id="p-home" class="page active">
+  <div class="hero">
+    <div class="eyebrow">IB Computer Science SL / HL</div>
+    <h1>Your last prep<br>before the <em>real thing</em></h1>
+    <p class="hero-sub">Comprehensive question bank covering every IB CS topic. Track progress, simulate exams, and master the mark scheme.</p>
+    <div class="hero-btns" style="margin-bottom:2.5rem">
+      <button class="btn-p" onclick="go('practice')">Start Practising →</button>
+      <button class="btn-g" onclick="go('exam')">Mock Exam</button>
+      <button class="btn-g" onclick="go('concepts')">Concepts</button>
+    </div>
+    <div class="home-stats" id="home-stats"></div>
+  </div>
+  <div class="sec">
+    <div class="sec-title">All Topics</div>
+    <div class="sec-sub">13 topics live now — click any to start practising immediately</div>
+    <div class="topic-grid" id="tgrid"></div>
+  </div>
+</div>
+
+<!-- PRACTICE -->
+<div id="p-practice" class="page">
+  <div class="prac-layout">
+    <div class="sidebar">
+      <div class="sb-title">Filters</div>
+      <div class="fgroup">
+        <div class="flabel">Topic</div>
+        <div id="tfilters"></div>
+      </div>
+      <div class="fgroup" id="lvl-group">
+        <div class="flabel">Level</div>
+        <button class="fbtn active" onclick="setLvl('all',this)"><span class="fdot"></span>All levels</button>
+        <button class="fbtn" onclick="setLvl('SL',this)"><span class="fdot"></span>SL only</button>
+        <button class="fbtn" onclick="setLvl('HL',this)"><span class="fdot"></span>HL only</button>
+      </div>
+      <div class="fgroup" id="mode-group">
+        <div class="flabel">Mode</div>
+        <button class="fbtn active" onclick="setMode('normal',this)"><span class="fdot"></span>Sequential</button>
+        <button class="fbtn" onclick="setMode('shuffle',this)"><span class="fdot"></span>Shuffle all</button>
+        <button class="fbtn" onclick="setMode('review',this)"><span class="fdot"></span>Review wrong</button>
+      </div>
+    </div>
+    <div class="prac-main">
+      <div class="prac-title" id="ptitle">All Topics</div>
+      <div class="prac-meta" id="pmeta"></div>
+      <div class="prog-wrap"><div class="prog-bar" id="pbar" style="width:0%"></div></div>
+      <div class="q-nav" id="qnav"></div>
+      <div id="pqa"></div>
+    </div>
+  </div>
+</div>
+
+<!-- CONCEPTS -->
+<div id="p-concepts" class="page">
+  <div id="clist">
+    <div class="con-wrap">
+      <div style="margin-bottom:1.375rem">
+        <div style="font-family:var(--serif);font-size:30px;color:var(--cream);margin-bottom:.2rem">Concepts</div>
+        <div style="color:var(--muted);font-size:13px;margin-bottom:1.25rem">IB CS encyclopedia — exam-focused notes for every topic</div>
+        <input class="con-search" placeholder="Search concepts…" oninput="filterC(this.value)">
+      </div>
+      <div class="con-grid" id="cgrid"></div>
+    </div>
+  </div>
+  <div id="cdet" style="display:none">
+    <div class="con-det" id="cdetcontent"></div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="p-dashboard" class="page">
+  <div class="dash-wrap">
+    <div class="dash-title">Dashboard</div>
+    <div class="dash-sub">Practice progress only — exam answers tracked separately</div>
+    <div class="stats-row" id="srow"></div>
+    <div class="daily-card">
+      <div><div style="font-size:15px;color:var(--cream);margin-bottom:.2rem;font-weight:500">Daily Challenge</div><div style="font-size:13px;color:var(--muted)">Questions from your weakest topics</div></div>
+      <button class="btn-p" onclick="dailyChallenge()">Start Challenge →</button>
+    </div>
+    <div class="dsec-title">Topic Performance</div>
+    <div class="heatmap" id="hmap"></div>
+    <div class="dsec-title">Recent Activity</div>
+    <div class="recent-list" id="rlist"></div>
+  </div>
+</div>
+
+<!-- EXAM -->
+<div id="p-exam" class="page">
+  <div id="estart">
+    <div class="exam-settings">
+      <div class="eyebrow" style="margin-bottom:.875rem">Mock Exam</div>
+      <h2>IB CS Simulator</h2>
+      <p>Configure your exam, then answer under timed conditions. Mirrors Paper 1 format.</p>
+      <div class="settings-grid">
+        <div class="sfield">
+          <div class="sfield-label">Questions</div>
+          <div class="sfield-val" id="q-count-val">20</div>
+          <input type="range" class="srange" id="q-count" min="20" max="50" value="20" oninput="document.getElementById('q-count-val').textContent=this.value">
+          <div class="time-hint" style="margin-top:.3rem">20 – 50 questions</div>
+        </div>
+        <div class="sfield">
+          <div class="sfield-label">Time Limit</div>
+          <div class="time-inputs">
+            <input type="number" class="time-input" id="exam-hrs" min="0" max="24" value="0" placeholder="HH">
+            <span class="time-sep">:</span>
+            <input type="number" class="time-input" id="exam-mins" min="0" max="59" value="30" placeholder="MM">
+          </div>
+          <div class="time-hint">HH:MM — set 00:00 for no limit</div>
+        </div>
+      </div>
+      <div class="written-toggle-wrap">
+        <div class="written-toggle-card" id="written-toggle-card" onclick="toggleWritten()">
+          <div class="wtc-left">
+            <div class="wtc-icon">✍️</div>
+            <div>
+              <div class="wtc-title">Include Written Answers</div>
+              <div class="wtc-sub">Each question gets a free-text box. Write your reasoning, then compare with the model answer in review.</div>
+            </div>
+          </div>
+          <div class="toggle-pill" id="written-pill"><div class="toggle-knob"></div></div>
+        </div>
+      </div>
+      <button class="btn-p" onclick="startExam()">Begin Exam →</button>
+    </div>
+  </div>
+  <div id="eactive" style="display:none">
+    <div class="exam-bar">
+      <div class="exam-prog" id="eqc">Q 1 of 20</div>
+      <div class="timer" id="etimer">30:00</div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="font-size:12px;color:var(--muted);font-family:var(--mono)" id="elive">0 correct</div>
+        <button class="btn-g" style="padding:5px 14px;font-size:12px" onclick="pauseExam()">⏸ Pause</button>
+      </div>
+    </div>
+    <div class="exam-wrap"><div id="eqa"></div><div style="margin-top:1.375rem;display:flex;gap:8px"><button class="btn-n" id="enxt" onclick="examNext()" disabled>Next →</button></div></div>
+  </div>
+  <div id="epause" class="pause-overlay" style="display:none">
+    <div class="pause-title">Exam Paused</div>
+    <div class="pause-sub">Your progress is saved</div>
+    <button class="btn-p" onclick="resumeExam()">▶ Resume Exam</button>
+    <button class="btn-g" style="margin-top:4px" onclick="resetExam()">End Exam</button>
+  </div>
+  <div id="eres" style="display:none">
+    <div class="exam-wrap">
+      <div style="text-align:center;padding:2rem 0">
+        <div class="result-score" id="rscore">0%</div>
+        <div class="result-lbl">Exam complete</div>
+        <div class="result-grade" id="rgrade"></div>
+        <div class="written-results-note" id="written-results-note">✍️ You used written answers — click <strong>Review Answers</strong> to see your responses alongside model answers and self-grade each one.</div>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+          <button class="btn-p" onclick="reviewExam()">Review Answers</button>
+          <button class="btn-g" onclick="retakeExam()">Retake (New Questions)</button>
+          <button class="btn-g" onclick="resetExam()">Settings</button>
+          <button class="btn-g" onclick="go('dashboard')">Dashboard</button>
+        </div>
+        <div id="rbreak"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

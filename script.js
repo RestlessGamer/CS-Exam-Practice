@@ -1,3 +1,4 @@
+const QDATA=[
 {id:25,topic:'Security',unit:'3.5',lvl:'SL',marks:2,text:'NAT (Network Address Translation) is primarily used to:',opts:['Encrypt all traffic between a device and the internet','Hide internal IP addresses from external networks and conserve public IP space','Block access to malicious websites automatically','Speed up DNS resolution by caching responses locally'],ans:1,exp:'NAT translates private internal IPs (192.168.x.x) to a single public IP, hiding the internal network from outside. It conserves public IP addresses and adds a layer of obscurity. A VPN is different — it creates an encrypted tunnel.'},
 // ===== SECURITY — VPN =====
 {id:26,topic:'Security',unit:'3.5',lvl:'SL',marks:2,text:'What does a VPN (Virtual Private Network) primarily do?',opts:['Speeds up your internet connection by caching websites locally','Encrypts your internet connection so data is secure before leaving the device','Assigns a new MAC address to your network interface','Blocks advertisements and trackers on websites you visit'],ans:1,exp:'A VPN encrypts the connection between your device and the internet, creating a secure "tunnel". Even if data is intercepted on a public network, it cannot be read without the encryption key.'},
@@ -789,6 +790,3 @@ function resetExam(){
 // INIT
 document.getElementById('sc').textContent=S.streak;
 renderTGrid();renderTFilters();buildPS();renderP();renderCGrid();renderHomeStats();
-</script>
-</body>
-</html>
